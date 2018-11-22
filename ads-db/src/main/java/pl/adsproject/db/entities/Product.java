@@ -2,25 +2,23 @@ package pl.adsproject.db.entities;
 
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 public class Product {
 
-    private Integer productId;
+    private UUID productId;
     private String name;
-    private String category;
-
-
+    private Collection<Category> categoriesByProductId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
-    @SequenceGenerator(name = "product_seq", sequenceName = "product_id_seq", allocationSize = 1)
     @Column(name = "product_id")
-    public Integer getProductId(){
+    public UUID getProductId(){
         return productId;
     }
 
-    public void setProductId(Integer productId){
+    public void setProductId(UUID productId){
         this.productId = productId;
     }
 
@@ -34,14 +32,19 @@ public class Product {
         this.name = name;
     }
 
-
-    @Basic
-    @Column(name = "category")
-    public String getCategory(){
-        return category;
+//    @ManyToMany(mappedBy = "productByProductId", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    public Collection<Category> getCategoriesByProductId() {
+        return categoriesByProductId;
     }
 
-    public void setCategory(String category){
-        this.category = category;
+    public void setCategoriesByProductId(Collection<Category> categoriesByProductId) {
+        this.categoriesByProductId = categoriesByProductId;
     }
+
+
 }

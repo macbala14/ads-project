@@ -2,24 +2,24 @@ package pl.adsproject.db.entities;
 
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.UUID;
 
 
 @Entity
 public class Client {
-    private Integer clientId;
+    private UUID clientId;
     private String name;
     private String password;
-    private String interests;
+    private Collection<Category> categoriesByClientId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
-    @SequenceGenerator(name = "client_seq", sequenceName = "client_id_seq", allocationSize = 1)
     @Column(name = "client_id")
-    public Integer getClientId(){
+    public UUID getClientId(){
         return clientId;
     }
 
-    public void setClientId(Integer clientId){
+    public void setClientId(UUID clientId){
         this.clientId = clientId;
     }
 
@@ -43,14 +43,19 @@ public class Client {
         this.password = password;
     }
 
-    @Basic
-    @Column(name ="interests")
-    public String getInterests(){
-        return  interests;
+//    @OneToMany(mappedBy = "clientByClientId", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "client_category",
+        joinColumns = @JoinColumn(name = "client_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    public Collection<Category> getCategoriesByClientId() {
+        return categoriesByClientId;
     }
 
-    public void setInterests(String interests){
-        this.interests = interests;
+    public void setCategoriesByClientId(Collection<Category> categoriesByClientId) {
+        this.categoriesByClientId = categoriesByClientId;
     }
+
 
 }

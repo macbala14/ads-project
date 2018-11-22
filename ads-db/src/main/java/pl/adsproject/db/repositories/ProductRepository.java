@@ -1,4 +1,4 @@
-package pl.adsproject.db.entities.repositories;
+package pl.adsproject.db.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import pl.adsproject.db.entities.Product;
